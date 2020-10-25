@@ -1,14 +1,13 @@
 import random
 import os
 
-def init_board(): #Skondensowałem
+def init_board():
     """Returns an empty 3-by-3 board (with .)."""
     board = [[".", ".", "."], [".", ".", "."], [".", ".", "."]]
    
     print(f"""   1   2   3\nA  {board[0][0]} | {board[0][1]} | {board[0][2]}\n  ---+---+---\nB  {board[1][0]} | {board[1][1]} | {board[1][2]}\n  ---+---+---\nC  {board[2][0]} | {board[2][1]} | {board[2][2]}""")
 
     return board
-
 
 def get_move(board, player, avilable_coordinate):
     """Returns the coordinates of a valid move for player on board."""
@@ -42,32 +41,37 @@ def get_move(board, player, avilable_coordinate):
             print("Please enter the correct coordinates from the available coordinates:")
     return row, col
 
-
-def get_ai_move(board, player):
+def get_ai_move(available_coordinate, player):
     """Returns the coordinates of a valid move for player on board."""
-    row, col = 0, 0
+    computer_choice = available_coordinate[random.randint(0, len(available_coordinate) - 1)]
+    if "A" in computer_choice:
+        row = 0
+    elif "B" in computer_choice:
+        row = 1
+    else:
+        row = 2
+    
+    if "1" in computer_choice:
+        col = 0
+    elif "2" in computer_choice:
+        col = 1
+    else:
+        col = 2
+    
     return row, col
 
-
-def mark(board, player, row, col): # Uprościłem tutaj nieco kod. Zostawiam do dyskusji.
+def mark(board, player, row, col):
     """Marks the element at row & col on the board for player."""
+
+    # Uprościłem tutaj nieco kod. Zostawiam do dyskusji.
     if "." in board[row][col]:
         board[row][col] = player
     else:
         pass
 
-    # if "." in board[col][row]:
-    #     if player == "O":
-    #         board[col][row] = "O"
-    #     else:
-    #         board[col][row] = "X"
-    # else:
-    #     pass
-
     return board
 
-
-def has_won(board, player): #Propozycja uproszczenia w oparciu o tym co mówiłać na Discordzie. Wcześniejszą wersję dałem w komentarzy, bo z jakiegoś powodu wówczas nie działa właściwie i nie mogę znaleźć przyczyny.
+def has_won(board, player):
     """Returns True if player has won the game."""
     a1 = board[0][0]
     a2 = board[0][1]
@@ -79,31 +83,20 @@ def has_won(board, player): #Propozycja uproszczenia w oparciu o tym co mówiła
     c2 = board[2][1]
     c3 = board[2][2]
 
-    # win_player_1 = ["X", "X", "X"]
-    # win_player_2 = ["O", "O", "O"]
+    win_player = [player, player, player]
 
     win_list = [[a1, a2, a3], [b1, b2, b3], [c1, c2, c3], [a1, b1, c1], [a2, b2, c2], [a3, b3, c3], [a1, b2, c3], [a3, b2, c1]]
 
-    win_player = [player, player, player]
+    #Tutaj te uprościłem kod zgodnie z tym co proponowałaś na Discordzie. ZMieniłem tez, zeby zracało wartości boolowskie True/False. Potem to fajnie działa podczas gry.
     for element in win_list:
         if element == win_player:
             return True
     else:
         return False
 
-    # for element in win_list:
-    #     if element == win_player_1:
-    #         print("Player X win")
-    #         return True
-    #     elif element == win_player_2:
-    #         print("Player O win")
-    #         return True
-    #     else:
-    #         return False
-
-
-def is_full(board):  #To zmieniłem całkowicie bo nie działało tak jak powinno
+def is_full(board):
     """Returns True if board is full."""
+    #To zmieniłem całkowicie bo nie działało tak jak powinno
     value = True
     for i in board:
         if "." in i:
@@ -112,24 +105,24 @@ def is_full(board):  #To zmieniłem całkowicie bo nie działało tak jak powinn
             continue
     return value
 
-
 def print_board(board):
     print(f"""   1   2   3\nA  {board[0][0]} | {board[0][1]} | {board[0][2]}\n  ---+---+---\nB  {board[1][0]} | {board[1][1]} | {board[1][2]}\n  ---+---+---\nC  {board[2][0]} | {board[2][1]} | {board[2][2]}""")
 
+    return board
 
-def print_result(winner):     #Skróciłem kod i naprawiłem kilka błędów.
+def print_result(winner):
     """Congratulates winner or proclaims tie (if winner equals zero)."""
+    #Skróciłem kod i naprawiłem kilka błędów.
     if winner == "X":
         print("Congratulations, player X win!")
     elif winner == "O":
         print("Congratulations,player O win!")
-    
 
+    
 def quit():
     exit()
 
-
-def tictactoe_game(mode='HUMAN-HUMAN'): # Propozycja kodu dla tej funkcji. W tic_tac_toe2.py fajnie to działa
+def tictactoe_game(mode='HUMAN-HUMAN'):
     os.system("cls || clear") #Dzięki temu fajnie się czyści wyświetlany obraz gry
     board = init_board()
     player = "O" #Skróciłem nieco.
@@ -150,32 +143,6 @@ def tictactoe_game(mode='HUMAN-HUMAN'): # Propozycja kodu dla tej funkcji. W tic
             print("Let's call it a tie")
         elif has_won(board, player):
             print_result(player)
-    
-    
-    # board = init_board()
-    # player_1 = "X"
-    # player_2 = "O"
-    # player = player_1
-    # avilable_coordinate = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
-    # # use get_move(), mark(), has_won(), is_full(), and print_board() to create game logic
-    # print_board(board)
-    # # tu powinna być pętla
-    # while len(avilable_coordinate) > 0:
-    #     row, col = get_move(board, player, avilable_coordinate)
-    #     print(row)  # do testowania
-    #     print (col) # do testowania
-    #     mark(board, player, row, col)
-    #     print(board)
-    #     # gdzieś powinniśmy uwzględnić zmianę gracza, na teraz wydaje mi się to poprawnym miejscem, zaraz po zaznaczeniu na tablicy 
-    #     if player == player_1:
-    #         player = player_2
-    #     else: 
-    #         player = player_1
-
-
-    # winner = 0
-    # print_result(winner)
-
 
 def main_menu():
     tictactoe_game('HUMAN-HUMAN')
@@ -183,3 +150,5 @@ def main_menu():
 
 if __name__ == '__main__':
     main_menu()
+
+tictactoe_game()
