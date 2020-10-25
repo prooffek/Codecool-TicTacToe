@@ -10,23 +10,23 @@ def init_board(): #Skondensowałem
     return board
 
 
-def get_move(board, player, avilable_coordinate):
+def get_move(board, player, available_coordinate):
     """Returns the coordinates of a valid move for player on board."""
     coordinates = {"A1":[0, 0], "A2":[0, 1], "A3":[0, 2], "B1":[1, 0], "B2":[1,1], "B3":[1, 2], "C1":[2, 0], "C2":[2, 1], "C3":[2, 2]}
     
     while True:
 
-        print(f"Avilable coordinate: {avilable_coordinate}")
+        print(f"Avilable coordinate: {available_coordinate}")
         player_input = input("Please enter the coordinates: ")
 
         if player_input.upper() == "quit".upper():
             quit()
 
-        elif player_input.upper() in avilable_coordinate:
+        elif player_input.upper() in available_coordinate:
             user_coordinate = coordinates.get(player_input.upper())
             row = user_coordinate[0]
             col = user_coordinate[1]
-            avilable_coordinate.remove(player_input.upper())
+            available_coordinate.remove(player_input.upper())
             return row, col
 
         elif player_input[0].upper() not in ["A", "B", "C"] and player_input[1] not in ["1", "2", "3"]:
@@ -43,9 +43,52 @@ def get_move(board, player, avilable_coordinate):
     return row, col
 
 
-def get_ai_move(board, player):
+def inteligent_AI(board): #Komputer blokuje ewentualne wygrane gracza
+    for i in range(3):
+        row_check = board[i]
+        col_check = [board[0][i], board[1][i], board[2][i]]
+        diag_check_1 = [board[0][0], board[1][1], board[2][2]]
+        diag_check_2 = [board[2][0], board[1][1], board[0][2]]
+        diag_row_index = {0 : 2, 1 : 1, 2 : 0}
+        value = False
+        if row_check.count("X") == 2 and "." in row_check:
+            row = i
+            col = row_check.index(".")
+            value = True
+            break
+        elif col_check.count("X") == 2 and "." in col_check:
+            row = col_check.index(".")
+            col = i
+            value = True
+            break
+        elif diag_check_1.count("X") == 2 and "." in diag_check_1:
+            row = diag_check_1.index(".")
+            col = row
+            value = True
+            break
+        elif diag_check_2.count("X") == 2 and "." in diag_check_2:
+            col = diag_check_2.index(".")
+            row = diag_row_index[col]
+            value = True
+            break
+
+    if value is True:
+        return row, col
+    else:
+        return value
+
+def get_ai_move(available_coordinate, player, board): #komputer sprawdza, czy istnieje zagroenie wygranej gracza, a jeśli takowego nie ma to losuje współrzędne.
     """Returns the coordinates of a valid move for player on board."""
-    row, col = 0, 0
+    
+    coordinates = {"A1":[0, 0], "A2":[0, 1], "A3":[0, 2], "B1":[1, 0], "B2":[1,1], "B3":[1, 2], "C1":[2, 0], "C2":[2, 1], "C3":[2, 2]}
+    
+    AI_choice = inteligent_AI(board)
+    if AI_choice is not False:
+        row, col = AI_choice
+    else:
+        computer_choice = available_coordinate[random.randint(0, len(available_coordinate) - 1)]
+        row, col = coordinates[computer_choice]
+
     return row, col
 
 
@@ -129,39 +172,60 @@ def quit():
     exit()
 
 
-def tictactoe_game(mode='HUMAN-HUMAN'): # Propozycja kodu dla tej funkcji. W tic_tac_toe2.py fajnie to działa
+def tictactoe_game(mode): # Propozycja kodu dla tej funkcji. W tic_tac_toe2.py fajnie to działa
     os.system("cls || clear") #Dzięki temu fajnie się czyści wyświetlany obraz gry
+    available_coordinate = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
     board = init_board()
-    player = "O" #Skróciłem nieco.
-    avilable_coordinate = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
+    player_1 = "X"
+    player_2 = "O"
+    player = player_2
+    full_board = is_full(board)
+    winner = has_won(board, player)
+   
+    if mode == "HUMAN-HUMAN":
+        while full_board is False and winner is False: #dałem tutaj False, poniewa >0 nie uwzględniało wygranej wcześniej ni wszystkie moliwości są wykorzystane.
+            if player == player_2: #Przeniosłem to tutaj, bo inaczej program nie działał poprawnie.
+                player = player_1
+            else:
+                player = player_2
+            row, col = get_move(board, player, available_coordinate)
+            os.system("cls || clear")#Dzięki temu widzimy tylko aktualny stan gry
+            board = mark(board, player, row, col)
+            print_board(board)
+            full_board = is_full(board)
+            winner = has_won(board, player)
 
-    
-    while is_full(board) is False and has_won(board, player) is False: #dałem tutaj False, poniewa >0 nie uwzględniało wygranej wcześniej ni wszystkie moliwości są wykorzystane.
-        if player == "O": #Przeniosłem to tutaj, bo inaczej program nie działał poprawnie.
-            player = "X"
-        else:
-            player = "O"
-        row, col = get_move(board, player, avilable_coordinate)
-        os.system("cls || clear")#Dzięki temu widzimy tylko aktualny stan gry
-        board = mark(board, player, row, col)
-        print_board(board)
-    else: #Tutaj będziemy drukować ju wynik końcowy
-        if is_full(board):
-            print("Let's call it a tie")
-        elif has_won(board, player):
-            print_result(player)
-    
-    
+    elif mode == "HUMAN-COMPUTER":    
+        while full_board is False and winner is False: #dałem tutaj False, poniewa >0 nie uwzględniało wygranej wcześniej ni wszystkie moliwości są wykorzystane.
+            if player == player_2: #Przeniosłem to tutaj, bo inaczej program nie działał poprawnie.
+                player = player_1
+                row, col = get_move(board, player, available_coordinate)
+            else:
+                player = player_2
+                row, col = get_ai_move(available_coordinate, player, board)
+            os.system("cls || clear")#Dzięki temu widzimy tylko aktualny stan gry
+            board = mark(board, player, row, col)
+            print_board(board)
+            full_board = is_full(board)
+            winner = has_won(board, player)
+
+    if full_board:
+        print("Let's call it a tie")
+        quit()
+    elif winner:
+        print_result(player)
+        quit()
+
     # board = init_board()
     # player_1 = "X"
     # player_2 = "O"
     # player = player_1
-    # avilable_coordinate = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
+    # available_coordinate = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
     # # use get_move(), mark(), has_won(), is_full(), and print_board() to create game logic
     # print_board(board)
     # # tu powinna być pętla
-    # while len(avilable_coordinate) > 0:
-    #     row, col = get_move(board, player, avilable_coordinate)
+    # while len(available_coordinate) > 0:
+    #     row, col = get_move(board, player, available_coordinate)
     #     print(row)  # do testowania
     #     print (col) # do testowania
     #     mark(board, player, row, col)
@@ -177,9 +241,13 @@ def tictactoe_game(mode='HUMAN-HUMAN'): # Propozycja kodu dla tej funkcji. W tic
     # print_result(winner)
 
 
+
+
 def main_menu():
     tictactoe_game('HUMAN-HUMAN')
 
 
 if __name__ == '__main__':
     main_menu()
+
+main_menu()
