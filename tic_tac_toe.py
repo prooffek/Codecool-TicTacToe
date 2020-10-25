@@ -82,11 +82,11 @@ def has_won(board, player):
 
     for element in win_list:
         if element == win_player_1:
-            return True, "X"
+            print("Player X win")
+            return True
         elif element == win_player_2:
-            return True, "O"
-        elif is_full(board):
-            return True, "tie"
+            print("Player O win")
+            return True
         else:
             return False
 
