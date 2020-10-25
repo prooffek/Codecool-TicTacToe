@@ -54,14 +54,11 @@ def get_ai_move(board, player):
 
 def mark(board, player, row, col):
     """Marks the element at row & col on the board for player."""
-    if row in ["1", "2", "3"] and col in ["A", "B", "C"]:
-        if "." in board[col][row]:
-            if player == "O":
-                board[col][row] = "O"
-            else:
-                board[col][row] = "X"
+    if "." in board[col][row]:
+        if player == "O":
+            board[col][row] = "O"
         else:
-            pass
+            board[col][row] = "X"
     else:
         pass
 
@@ -85,11 +82,11 @@ def has_won(board, player):
 
     for element in win_list:
         if element == win_player_1:
-            print("Player X win")
-            return True
+            return True, "X"
         elif element == win_player_2:
-            print("Player O win")
-            return True
+            return True, "O"
+        elif is_full(board):
+            return True, "tie"
         else:
             return False
 
@@ -113,7 +110,14 @@ C  {board[2][0]} | {board[2][1]} | {board[2][2]}""")
 
 def print_result(winner):
     """Congratulates winner or proclaims tie (if winner equals zero)."""
-    pass
+    if winner[1] == "X":
+        print("Congratulations, player X win!")
+    elif winner[1] == "O":
+        print("Congratulations,player O win!")
+    elif winner[1] == "tie":
+        print("Let's call it a tie!")
+    elif winner[0] is False:
+    
 
 def quit():
     exit()
