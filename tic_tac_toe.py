@@ -1,6 +1,14 @@
 def init_board():
     """Returns an empty 3-by-3 board (with .)."""
     board = [[".", ".", "."], [".", ".", "."], [".", ".", "."]]
+   
+    print(f"""   1   2   3
+A  {board[0][0]} | {board[0][1]} | {board[0][2]}
+  ---+---+---
+B  {board[1][0]} | {board[1][1]} | {board[1][2]}
+  ---+---+---
+C  {board[2][0]} | {board[2][1]} | {board[2][2]}""")
+
     return board
 
 
@@ -88,12 +96,19 @@ def has_won(board, player):
 
 def is_full(board):
     """Returns True if board is full."""
-    return False
+    if "." not in board:
+        return True
+    else:
+        return False
 
 
 def print_board(board):
-    """Prints a 3-by-3 board on the screen with borders."""
-    pass
+    print(f"""   1   2   3
+A  {board[0][0]} | {board[0][1]} | {board[0][2]}
+  ---+---+---
+B  {board[1][0]} | {board[1][1]} | {board[1][2]}
+  ---+---+---
+C  {board[2][0]} | {board[2][1]} | {board[2][2]}""")
 
 
 def print_result(winner):
