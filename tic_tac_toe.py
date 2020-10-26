@@ -83,13 +83,14 @@ def inteligent_AI(board): #Komputer blokuje ewentualne wygrane gracza
 def get_ai_move(available_coordinate, player, board, coordinates): #komputer sprawdza, czy istnieje zagroenie wygranej gracza, a jeśli takowego nie ma to losuje współrzędne.
     """Returns the coordinates of a valid move for player on board."""
     
-    
-    
     AI_choice = inteligent_AI(board)
     if AI_choice is not False:
         row, col = AI_choice
+        dict_key = [key for (key, value) in coordinates.items() if value == AI_choice]
+        del available_coordinate[dict_key]
     else:
         computer_choice = available_coordinate[random.randint(0, len(available_coordinate) - 1)]
+        available_coordinate.remove(computer_choice)
         row, col = coordinates[computer_choice]
 
     return row, col
@@ -97,25 +98,15 @@ def get_ai_move(available_coordinate, player, board, coordinates): #komputer spr
 
 def mark(board, player, row, col): # Uprościłem tutaj nieco kod. Zostawiam do dyskusji.
     """Marks the element at row & col on the board for player."""
-    # wydaje mi się że nie musimy sprawdzać czy jest "." bo nie ma możliwości wybrania 2 razy tego samego
     
-    if player == "X":
+    if "." in board[row][col] and player == "X":
         board[row][col] = colored(player, "red")
-    else:
+    elif "." in board[row][col] and player == "O":
         board[row][col] = colored(player, "yellow")
+    else:
+        pass
 
-    # if "." in board[row][col]:
-    #     board[row][col] = player
-    # else:
-    #     pass
-
-    # if "." in board[col][row]:
-    #     if player == "O":
-    #         board[col][row] = "O"
-    #     else:
-    #         board[col][row] = "X"
-    # else:
-    #     pass
+   
 
     return board
 
@@ -211,13 +202,13 @@ def tictactoe_game(mode): # Propozycja kodu dla tej funkcji. W tic_tac_toe2.py f
                 row, col = get_ai_move(available_coordinate, player, board, coordinates)
         elif mode == "COMPUTER-COMPUTER":
             row, col = get_ai_move(available_coordinate, player, board, coordinates)
-            time.sleep(1)
+            
 
         os.system("cls || clear")#Dzięki temu widzimy tylko aktualny stan gry
         
         board = mark(board, player, row, col)
         print_board(board)
-        time.sleep(2)
+        time.sleep(3)
         full_board = is_full(board)
         winner = has_won(board, player)
 
