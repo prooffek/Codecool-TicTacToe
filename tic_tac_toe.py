@@ -1,11 +1,13 @@
 import random
 import os
+from termcolor import colored  # do kolorowania 
 
 def init_board(): #Skondensowałem
     """Returns an empty 3-by-3 board (with .)."""
     board = [[".", ".", "."], [".", ".", "."], [".", ".", "."]]
-   
-    print(f"""   1   2   3\nA  {board[0][0]} | {board[0][1]} | {board[0][2]}\n  ---+---+---\nB  {board[1][0]} | {board[1][1]} | {board[1][2]}\n  ---+---+---\nC  {board[2][0]} | {board[2][1]} | {board[2][2]}""")
+    
+    print_board(board)
+    # print(f"""   1   2   3\nA  {board[0][0]} | {board[0][1]} | {board[0][2]}\n  ---+---+---\nB  {board[1][0]} | {board[1][1]} | {board[1][2]}\n  ---+---+---\nC  {board[2][0]} | {board[2][1]} | {board[2][2]}""")
 
     return board
 
@@ -94,10 +96,17 @@ def get_ai_move(available_coordinate, player, board): #komputer sprawdza, czy is
 
 def mark(board, player, row, col): # Uprościłem tutaj nieco kod. Zostawiam do dyskusji.
     """Marks the element at row & col on the board for player."""
-    if "." in board[row][col]:
-        board[row][col] = player
+    # wydaje mi się że nie musimy sprawdzać czy jest "." bo nie ma możliwości wybrania 2 razy tego samego
+    
+    if player == "X":
+        board[row][col] = colored(player, "red")
     else:
-        pass
+        board[row][col] = colored(player, "yellow")
+
+    # if "." in board[row][col]:
+    #     board[row][col] = player
+    # else:
+    #     pass
 
     # if "." in board[col][row]:
     #     if player == "O":
@@ -122,14 +131,16 @@ def has_won(board, player): #Propozycja uproszczenia w oparciu o tym co mówiła
     c2 = board[2][1]
     c3 = board[2][2]
 
-    # win_player_1 = ["X", "X", "X"]
-    # win_player_2 = ["O", "O", "O"]
+    colored_player_1 = colored("X", "red")
+    colored_player_2 = colored("O", "yellow")
+    win_player_1 = [colored_player_1, colored_player_1, colored_player_1]
+    win_player_2 = [colored_player_2, colored_player_2, colored_player_2]
 
     win_list = [[a1, a2, a3], [b1, b2, b3], [c1, c2, c3], [a1, b1, c1], [a2, b2, c2], [a3, b3, c3], [a1, b2, c3], [a3, b2, c1]]
 
-    win_player = [player, player, player]
+    #win_player = [player, player, player]
     for element in win_list:
-        if element == win_player:
+        if element == win_player_1 or element == win_player_2:
             return True
     else:
         return False
@@ -244,10 +255,31 @@ def tictactoe_game(mode): # Propozycja kodu dla tej funkcji. W tic_tac_toe2.py f
 
 
 def main_menu():
-    tictactoe_game('HUMAN-HUMAN')
+    print("""
+                    Welcome in the game
+                 _______    ______        ______        
+                /_  __(_)__/_  __/__ ____/_  __/__  ___ 
+                 / / / / __// / / _ `/ __// / / _ \/ -_)
+                /_/ /_/\__//_/  \_,_/\__//_/  \___/\__/ 
+
+                Press 1 to play in HUMAN - HUMAN mode
+                Press 2 to play in HUMAN - COMPUTER mode
+                Enter quit to exit the game
+
+    """)
+    input_user = input()
+    if input_user == str(1):
+        tictactoe_game("HUMAN-HUMAN")
+    elif input_user == str(2):
+        tictactoe_game("HUMAN-COMPUTER")
+    elif input_user == "quit":
+        quit()
+    else:
+        print("Starting the default game mode HUMAN - HUMAN")  # żeby uniknąć pętli while, ale można w sumie ją dodać, można nawet jakoś to połączyć z tym żeby można było ponownie zagrać 
+        tictactoe_game("HUMAN-HUMAN")
+    
 
 
 if __name__ == '__main__':
     main_menu()
 
-main_menu()
