@@ -87,11 +87,12 @@ def get_ai_move(available_coordinate, player, board, coordinates): #komputer spr
     if AI_choice is not False:
         row, col = AI_choice
         dict_key = [key for (key, value) in coordinates.items() if value == AI_choice]
-        del available_coordinate[dict_key]
     else:
         computer_choice = available_coordinate[random.randint(0, len(available_coordinate) - 1)]
-        available_coordinate.remove(computer_choice)
+        dict_key = [computer_choice]
         row, col = coordinates[computer_choice]
+
+    available_coordinate.remove(dict_key[0])
 
     return row, col
 
