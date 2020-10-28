@@ -14,8 +14,8 @@ def get_move(board, player, available_coordinate, coordinates):
     
     while True:
 
-        print(f"Avilable coordinate: {available_coordinate}")
-        player_input = input("Please enter the coordinates: ")
+        print(colored(f"Avilable coordinate: {available_coordinate}", "cyan"))
+        player_input = input(colored("Please enter the coordinates: ", "cyan"))
 
         if player_input.upper() == "QUIT":
             quit()
@@ -40,7 +40,7 @@ def get_move(board, player, available_coordinate, coordinates):
         #     print("Enter the coordinates correctly, they should contain 1, 2 or 3")
 
         else:
-            print("Please enter the correct coordinates from the available coordinates:")
+            print(colored("Please enter the correct coordinates from the available coordinates:", "red"))
     
 
 
@@ -85,7 +85,7 @@ def get_ai_move(available_coordinate, player, board, coordinates): #komputer spr
     AI_choice = inteligent_AI(board)
     if AI_choice is not False:
         row, col = AI_choice
-        
+
         # bez linijki poniżej był błąd index out of range - debugowałam i zauważyłam że dict_key jest puste
         value_to_find = [row, col] # nie działało poprawnie, prawdopodobnie dlatego że w linijce powyżej była tupla a nie lista, w słowniku mamy listę i chyba to był problem 
         
@@ -105,7 +105,7 @@ def mark(board, colored_board, player, row, col):
     
     if "." in board[row][col] and player == "X":
         board[row][col] = "X"
-        colored_board[row][col] = colored("X", "red")
+        colored_board[row][col] = colored("X", "magenta")
     elif "." in board[row][col] and player == "O":
         board[row][col] = "O"
         colored_board[row][col] = colored(player, "yellow")
@@ -153,10 +153,11 @@ def print_board(colored_board):
     print(f"""   1   2   3\nA  {colored_board[0][0]} | {colored_board[0][1]} | {colored_board[0][2]}\n  ---+---+---\nB  {colored_board[1][0]} | {colored_board[1][1]} | {colored_board[1][2]}\n  ---+---+---\nC  {colored_board[2][0]} | {colored_board[2][1]} | {colored_board[2][2]}""")
 
 
+
 def print_result(winner):    
     """Congratulates winner or proclaims tie (if winner equals zero)."""
     if winner == "X":
-        print(colored("Congratulations, player X win!", "red"))
+        print(colored("Congratulations, player X win!", "magenta"))
     elif winner == "O":
         print(colored("Congratulations,player O win!", "yellow"))
     
@@ -184,7 +185,7 @@ def tictactoe_game(mode):
         else:
             player = player_2
 
-        print(f"Now player {player} move")
+        print(colored(f"Now player {player} move", "cyan"))
         time.sleep(0.3)
 
         if mode == "HUMAN-HUMAN":
@@ -205,14 +206,14 @@ def tictactoe_game(mode):
         full_board = is_full(board)
 
     if full_board and winner == False:
-        print("Let's call it a tie")
+        print(colored("Let's call it a tie", "greem"))
         quit()
     elif winner:
         print_result(player)
         quit()
 
 def main_menu():
-    print("""
+    print(colored("""
                     Welcome in the game
                  _______    ______        ______        
                 /_  __(_)__/_  __/__ ____/_  __/__  ___ 
@@ -224,7 +225,7 @@ def main_menu():
                 Press 3 to play in COMPUTER - COMPUTER mode
                 Enter quit to exit the game
 
-    """)
+    """, "cyan"))
     input_user = input()
     if input_user == str(1):
         tictactoe_game("HUMAN-HUMAN")
