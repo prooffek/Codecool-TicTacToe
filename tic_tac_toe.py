@@ -44,7 +44,7 @@ def get_move(board, player, available_coordinate, coordinates):
     
 
 
-def inteligent_AI(board, player): #Komputer blokuje ewentualne wygrane gracza
+def inteligent_AI(board): #Komputer blokuje ewentualne wygrane gracza
     for i in range(3):
         row_check = board[i]
         col_check = [board[0][i], board[1][i], board[2][i]]
@@ -53,22 +53,22 @@ def inteligent_AI(board, player): #Komputer blokuje ewentualne wygrane gracza
         diag_row_index = {0 : 2, 1 : 1, 2 : 0}
         
         value = False
-        if row_check.count(player) == 2 and "." in row_check:
+        if row_check.count("X") == 2 and "." in row_check:
             row = i
             col = row_check.index(".")
             value = True
             break
-        elif col_check.count(player) == 2 and "." in col_check:
+        elif col_check.count("X") == 2 and "." in col_check:
             row = col_check.index(".")
             col = i
             value = True
             break
-        elif diag_check_1.count(player) == 2 and "." in diag_check_1:
+        elif diag_check_1.count("X") == 2 and "." in diag_check_1:
             row = diag_check_1.index(".")
             col = row
             value = True
             break
-        elif diag_check_2.count(player) == 2 and "." in diag_check_2:
+        elif diag_check_2.count("X") == 2 and "." in diag_check_2:
             col = diag_check_2.index(".")
             row = diag_row_index[col]
             value = True
@@ -82,7 +82,7 @@ def inteligent_AI(board, player): #Komputer blokuje ewentualne wygrane gracza
 def get_ai_move(available_coordinate, player, board, coordinates): #komputer sprawdza, czy istnieje zagroenie wygranej gracza, a jeśli takowego nie ma to losuje współrzędne.
     """Returns the coordinates of a valid move for player on board."""
     
-    AI_choice = inteligent_AI(board, player)
+    AI_choice = inteligent_AI(board)
     if AI_choice is not False:
         row, col = AI_choice
         dict_key = [key for (key, value) in coordinates.items() if value == AI_choice]
@@ -182,6 +182,7 @@ def tictactoe_game(mode):
             player = player_2
 
         print(f"Now player {player} move")
+        time.sleep(0.5)
 
         if mode == "HUMAN-HUMAN":
             row, col = get_move(board, player, available_coordinate, coordinates)
