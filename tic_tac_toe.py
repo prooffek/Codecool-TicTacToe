@@ -85,7 +85,11 @@ def get_ai_move(available_coordinate, player, board, coordinates): #komputer spr
     AI_choice = inteligent_AI(board)
     if AI_choice is not False:
         row, col = AI_choice
-        dict_key = [key for (key, value) in coordinates.items() if value == AI_choice]
+        
+        # bez linijki poniżej był błąd index out of range - debugowałam i zauważyłam że dict_key jest puste
+        value_to_find = [row, col] # nie działało poprawnie, prawdopodobnie dlatego że w linijce powyżej była tupla a nie lista, w słowniku mamy listę i chyba to był problem 
+        
+        dict_key = [key for (key, value) in coordinates.items() if value == value_to_find]
     else:
         computer_choice = available_coordinate[random.randint(0, len(available_coordinate) - 1)]
         dict_key = [computer_choice]
@@ -96,13 +100,15 @@ def get_ai_move(available_coordinate, player, board, coordinates): #komputer spr
     return row, col
 
 
-def mark(board, player, row, col): 
+def mark(board, colored_board, player, row, col): 
     """Marks the element at row & col on the board for player."""
     
     if "." in board[row][col] and player == "X":
-        board[row][col] = colored(player, "red")
+        board[row][col] = "X"
+        colored_board[row][col] = colored("X", "red")
     elif "." in board[row][col] and player == "O":
-        board[row][col] = colored(player, "yellow")
+        board[row][col] = "O"
+        colored_board[row][col] = colored(player, "yellow")
     else:
         pass
 
@@ -121,16 +127,12 @@ def has_won(board, player):
     c2 = board[2][1]
     c3 = board[2][2]
 
-    colored_player_1 = colored("X", "red")
-    colored_player_2 = colored("O", "yellow")
-    win_player_1 = [colored_player_1, colored_player_1, colored_player_1]
-    win_player_2 = [colored_player_2, colored_player_2, colored_player_2]
-
+    win_player = [player, player, player]
     win_list = [[a1, a2, a3], [b1, b2, b3], [c1, c2, c3], [a1, b1, c1], [a2, b2, c2], [a3, b3, c3], [a1, b2, c3], [a3, b2, c1]]
 
     
     for element in win_list:
-        if element == win_player_1 or element == win_player_2:
+        if element == win_player:
             return True
     else:
         return False
@@ -146,17 +148,17 @@ def is_full(board):
     return value
 
 
-def print_board(board):
+def print_board(colored_board):
 
-    print(f"""   1   2   3\nA  {board[0][0]} | {board[0][1]} | {board[0][2]}\n  ---+---+---\nB  {board[1][0]} | {board[1][1]} | {board[1][2]}\n  ---+---+---\nC  {board[2][0]} | {board[2][1]} | {board[2][2]}""")
+    print(f"""   1   2   3\nA  {colored_board[0][0]} | {colored_board[0][1]} | {colored_board[0][2]}\n  ---+---+---\nB  {colored_board[1][0]} | {colored_board[1][1]} | {colored_board[1][2]}\n  ---+---+---\nC  {colored_board[2][0]} | {colored_board[2][1]} | {colored_board[2][2]}""")
 
 
 def print_result(winner):    
     """Congratulates winner or proclaims tie (if winner equals zero)."""
     if winner == "X":
-        print("Congratulations, player X win!")
+        print(colored("Congratulations, player X win!", "red"))
     elif winner == "O":
-        print("Congratulations,player O win!")
+        print(colored("Congratulations,player O win!", "yellow"))
     
 
 def quit():
@@ -168,7 +170,8 @@ def tictactoe_game(mode):
     available_coordinate = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
     coordinates = {"A1":[0, 0], "A2":[0, 1], "A3":[0, 2], "B1":[1, 0], "B2":[1,1], "B3":[1, 2], "C1":[2, 0], "C2":[2, 1], "C3":[2, 2]}
     board = init_board()
-    print_board(board)
+    colored_board = init_board()
+    print_board(colored_board)
     player_1 = "X"
     player_2 = "O"
     player = player_2
@@ -182,7 +185,7 @@ def tictactoe_game(mode):
             player = player_2
 
         print(f"Now player {player} move")
-        time.sleep(0.5)
+        time.sleep(0.3)
 
         if mode == "HUMAN-HUMAN":
             row, col = get_move(board, player, available_coordinate, coordinates)
@@ -195,8 +198,8 @@ def tictactoe_game(mode):
             row, col = get_ai_move(available_coordinate, player, board, coordinates)
             
         os.system("cls || clear")
-        board = mark(board, player, row, col)
-        print_board(board)
+        board = mark(board,colored_board, player, row, col)
+        print_board(colored_board)
         time.sleep(1)
         winner = has_won(board, player)
         full_board = is_full(board)
