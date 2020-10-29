@@ -51,24 +51,24 @@ def inteligent_AI(board): #Komputer blokuje ewentualne wygrane gracza
         diag_check_1 = [board[0][0], board[1][1], board[2][2]]
         diag_check_2 = [board[2][0], board[1][1], board[0][2]]
         diag_row_index = {0 : 2, 1 : 1, 2 : 0}
-        
         value = False
-        if row_check.count("X") == 2 and "." in row_check:
+        two_in_line = 2
+        if (row_check.count("X") == two_in_line or row_check.count("O") == two_in_line) and "." in row_check:
             row = i
             col = row_check.index(".")
             value = True
             break
-        elif col_check.count("X") == 2 and "." in col_check:
+        elif (col_check.count("X") == two_in_line or col_check.count("O") == two_in_line) and "." in col_check:
             row = col_check.index(".")
             col = i
             value = True
             break
-        elif diag_check_1.count("X") == 2 and "." in diag_check_1:
+        elif (diag_check_1.count("X") == two_in_line or diag_check_1.count("O") == two_in_line) and "." in diag_check_1:
             row = diag_check_1.index(".")
             col = row
             value = True
             break
-        elif diag_check_2.count("X") == 2 and "." in diag_check_2:
+        elif (diag_check_2.count("X") == two_in_line or diag_check_2.count("O") == two_in_line) and "." in diag_check_2:
             col = diag_check_2.index(".")
             row = diag_row_index[col]
             value = True
@@ -206,7 +206,7 @@ def tictactoe_game(mode):
         full_board = is_full(board)
 
     if full_board and winner == False:
-        print(colored("Let's call it a tie", "greem"))
+        print(colored("Let's call it a tie", "green"))
         quit()
     elif winner:
         print_result(player)
