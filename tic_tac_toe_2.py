@@ -44,37 +44,36 @@ def get_move(board, player, available_coordinate, coordinates):
     
 
 
-def inteligent_AI(board): #Komputer blokuje ewentualne wygrane gracza
+def inteligent_AI(board, player): #Komputer blokuje ewentualne wygrane gracza
     #Zauwazyłem, ze diag_check_1 i diag_check2 były powtarzane 3 razy, choć tylko raz wystarczy. Wyrzuciłem je zatem poza pętlę for, eby zoptymalizować przebieg.
-    #Zastanawiam się, czy nie dodać parametru "player", zeby poniej zamiast "X"/"O" dawać zmienne "player"/"opponent". Co sądzisz?
+    if player == "X":
+        opponent = "O"
+    else:
+        opponent = "X"
+
     diag_check_1 = [board[0][0], board[1][1], board[2][2]]
     diag_check_2 = [board[2][0], board[1][1], board[0][2]]
     diag_row_index = {0 : 2, 1 : 1, 2 : 0}
-    row = False #Skróci to kod o kilka linijek
-    #value = False
+    row = False
     two_in_line = 2
-    if (diag_check_1.count("X") == two_in_line or diag_check_1.count("O") == two_in_line) and "." in diag_check_1:
+    if (diag_check_1.count(player) == two_in_line or diag_check_1.count(opponent) == two_in_line) and "." in diag_check_1:
             row = diag_check_1.index(".")
             col = row
-            #value = True
-    elif (diag_check_2.count("X") == two_in_line or diag_check_2.count("O") == two_in_line) and "." in diag_check_2:
+    elif (diag_check_2.count(player) == two_in_line or diag_check_2.count(opponent) == two_in_line) and "." in diag_check_2:
             col = diag_check_2.index(".")
             row = diag_row_index[col]
-            #value = True
     else:
         for i in range(3):
             row_check = board[i]
             col_check = [board[0][i], board[1][i], board[2][i]]
-            if (row_check.count("X") == two_in_line or row_check.count("O") == two_in_line) and "." in row_check:
+            if (row_check.count(player) == two_in_line or row_check.count(opponent) == two_in_line) and "." in row_check:
                 row = i
                 col = row_check.index(".")
-                #value = True
-                #break #To ju nie jest potrzebne
-            elif (col_check.count("X") == two_in_line or col_check.count("O") == two_in_line) and "." in col_check:
+                break
+            elif (col_check.count(player) == two_in_line or col_check.count(opponent) == two_in_line) and "." in col_check:
                 row = col_check.index(".")
                 col = i
-                #value = True
-                #break #To ju nie jest potrzebne
+                break
 
     # for i in range(3):
     #     row_check = board[i]
@@ -105,15 +104,15 @@ def inteligent_AI(board): #Komputer blokuje ewentualne wygrane gracza
     #         value = True
     #         break
 
-    if row: #value is True:
+    if row:
         return row, col
     else:
-        return False #value
+        return False
 
 def get_ai_move(available_coordinate, player, board, coordinates): #komputer sprawdza, czy istnieje zagroenie wygranej gracza, a jeśli takowego nie ma to losuje współrzędne.
     """Returns the coordinates of a valid move for player on board."""
     
-    AI_choice = inteligent_AI(board)
+    AI_choice = inteligent_AI(board, player)
     if AI_choice is not False:
         row, col = AI_choice
 
