@@ -54,22 +54,22 @@ def inteligent_AI(board): #Komputer blokuje ewentualne wygrane gracza
         diag_check_2 = [board[2][0], board[1][1], board[0][2]]
         diag_row_index = {0 : 2, 1 : 1, 2 : 0}
         value = False
-        if row_check.count("X") == 2 and "." in row_check:
+        if (row_check.count("O") == 2 or row_check.count("X") == 2) and "." in row_check:
             row = i
             col = row_check.index(".")
             value = True
             break
-        elif col_check.count("X") == 2 and "." in col_check:
+        elif (col_check.count("O") == 2 or col_check.count("X") == 2) and "." in col_check:
             row = col_check.index(".")
             col = i
             value = True
             break
-        elif diag_check_1.count("X") == 2 and "." in diag_check_1:
+        elif (diag_check_1.count("O") == 2 or diag_check_1.count("X") == 2) and "." in diag_check_1:
             row = diag_check_1.index(".")
             col = row
             value = True
             break
-        elif diag_check_2.count("X") == 2 and "." in diag_check_2:
+        elif (diag_check_2.count("O") == 2 or diag_check_2.count("X") == 2) and "." in diag_check_2:
             col = diag_check_2.index(".")
             row = diag_row_index[col]
             value = True
