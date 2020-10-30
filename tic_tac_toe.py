@@ -241,8 +241,7 @@ def tictactoe_game(mode):
         print_result(player)
         #quit()
     
-    user_input = False
-    while user_input is False:
+    while True:
         user_input = input("Do you want to return to main menu? (y/n): ")    
         if user_input.upper() == "Y":
             main_menu()
@@ -250,7 +249,6 @@ def tictactoe_game(mode):
             quit()
         else:
             print(colored("Invalid input.", "red"), end=" ")
-            user_input = False
 
 
 def main_menu():
