@@ -53,16 +53,16 @@ def inteligent_AI(board, player, opponent): #Komputer blokuje ewentualne wygrane
     diag_row_index = {0 : 2, 1 : 1, 2 : 0}
     value = False
     two_in_line = 2
-    players = [player, opponent]
+    players = [opponent, player]
      # Dzięki temu komputer będzie dązył do wygranej a nie tylko blokował przeciwnika.
-    for player in players:    
-        if diag_check_1.count(player) == two_in_line and "." in diag_check_1:
+    for element in players:     #Zmieniłem "player" na "element", zeby bylo czytelniej (mieliśmy 2 rózne zmienne "player" w uzyciu)
+        if diag_check_1.count(element) == two_in_line and "." in diag_check_1:
             row = diag_check_1.index(".")
             col = row
             value = True
             break
             
-        elif diag_check_2.count(player) == two_in_line and "." in diag_check_2:
+        elif diag_check_2.count(element) == two_in_line and "." in diag_check_2:
             col = diag_check_2.index(".")
             row = diag_row_index[col]
             value = True
@@ -72,12 +72,12 @@ def inteligent_AI(board, player, opponent): #Komputer blokuje ewentualne wygrane
             for i in range(len(board)):
                 row_check = board[i]
                 col_check = [board[0][i], board[1][i], board[2][i]]
-                if row_check.count(player) == two_in_line and "." in row_check:
+                if row_check.count(element) == two_in_line and "." in row_check:
                     row = i
                     col = row_check.index(".")
                     value = True
                     break
-                elif col_check.count(player) == two_in_line and "." in col_check:
+                elif col_check.count(element) == two_in_line and "." in col_check:
                     row = col_check.index(".")
                     col = i
                     value = True
