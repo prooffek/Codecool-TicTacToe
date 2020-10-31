@@ -52,7 +52,7 @@ def inteligent_AI(board, player): #Komputer blokuje ewentualne wygrane gracza
     diag_row_index = {0 : 2, 1 : 1, 2 : 0}
     value = False
     two_in_line = 2
-    for i in range(2):
+    for i in range(2): # Dzięki temu komputer będzie dązył do wygranej a nie tylko blokował przeciwnika.
         if player == "X":
             player = "O"
         else:
