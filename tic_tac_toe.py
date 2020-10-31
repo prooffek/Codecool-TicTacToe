@@ -47,37 +47,41 @@ def get_move(board, player, available_coordinate, coordinates):
 def inteligent_AI(board, player, opponent): #Komputer blokuje ewentualne wygrane gracza
     #Zauwazyłem, ze diag_check_1 i diag_check2 były powtarzane 3 razy, choć tylko raz wystarczy. Wyrzuciłem je zatem poza pętlę for, eby zoptymalizować przebieg.
     #Zastanawiam się, czy nie dodać parametru "player", zeby poniej zamiast "X"/"O" dawać zmienne "player"/"opponent". Co sądzisz?
+    
     diag_check_1 = [board[0][0], board[1][1], board[2][2]]
     diag_check_2 = [board[2][0], board[1][1], board[0][2]]
     diag_row_index = {0 : 2, 1 : 1, 2 : 0}
     value = False
     two_in_line = 2
+    players = [player, opponent]
      # Dzięki temu komputer będzie dązył do wygranej a nie tylko blokował przeciwnika.
-        
-    if (diag_check_1.count(player) == two_in_line or diag_check_1.count(opponent) == two_in_line) and "." in diag_check_1:
-        row = diag_check_1.index(".")
-        col = row
-        value = True
-        
-    elif (diag_check_2.count(player) == two_in_line or diag_check_2.count(opponent) == two_in_line) and "." in diag_check_2:
-        col = diag_check_2.index(".")
-        row = diag_row_index[col]
-        value = True
-        
-    else:
-        for i in range(3):
-            row_check = board[i]
-            col_check = [board[0][i], board[1][i], board[2][i]]
-            if (row_check.count(player) == two_in_line or row_check.count(opponent) == two_in_line) and "." in row_check:
-                row = i
-                col = row_check.index(".")
-                value = True
-                break
-            elif (col_check.count(player) == two_in_line or col_check.count(opponent) == two_in_line) and "." in col_check:
-                row = col_check.index(".")
-                col = i
-                value = True
-                break
+    for player in players:    
+        if diag_check_1.count(player) == two_in_line and "." in diag_check_1:
+            row = diag_check_1.index(".")
+            col = row
+            value = True
+            break
+            
+        elif diag_check_2.count(player) == two_in_line and "." in diag_check_2:
+            col = diag_check_2.index(".")
+            row = diag_row_index[col]
+            value = True
+            break
+            
+        else:
+            for i in range(len(board)):
+                row_check = board[i]
+                col_check = [board[0][i], board[1][i], board[2][i]]
+                if row_check.count(player) == two_in_line and "." in row_check:
+                    row = i
+                    col = row_check.index(".")
+                    value = True
+                    break
+                elif col_check.count(player) == two_in_line and "." in col_check:
+                    row = col_check.index(".")
+                    col = i
+                    value = True
+                    break
 
     # for i in range(3):
     #     row_check = board[i]
@@ -175,6 +179,7 @@ def has_won(board, player):
 
 def is_full(board):  
     """Returns True if board is full."""
+    
     value = True
     for i in board:
         if "." in i:
