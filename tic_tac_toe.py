@@ -8,6 +8,17 @@ def init_board():
 
     return [[".", ".", "."], [".", ".", "."], [".", ".", "."]]
 
+def random_player():
+    players = ["X", "O"]
+
+    user = players[random.randint(0, len(players) - 1)]
+    if user == "X":
+        computer = "O"
+    else:
+        computer = "X"
+    
+    return user, computer
+
 
 def get_move(board, player, available_coordinate, coordinates):
     """Returns the coordinates of a valid move for player on board."""
@@ -213,10 +224,19 @@ def tictactoe_game(mode):
     board = init_board()
     colored_board = init_board()
     print_board(colored_board)
-    player_1 = "X"
-    player_2 = "O"
-    player = player_2
+    players = random_player()
+    player_1 = players[0]
+    player_2 = players[1]
+    # player_1 = "X"
+    # player_2 = "O"
+    #player = player_2
     full_board = is_full(board)
+
+    if player_1 == "X":
+        player = player_2
+    else:
+        player = player_1
+    
     winner = has_won(board, player)
 
     while full_board is False and winner is False:
