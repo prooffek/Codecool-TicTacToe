@@ -44,7 +44,7 @@ def get_move(board, player, available_coordinate, coordinates):
     
 
 
-def inteligent_AI(board, player): #Komputer blokuje ewentualne wygrane gracza
+def inteligent_AI(board, player, opponent): #Komputer blokuje ewentualne wygrane gracza
     #Zauwazyłem, ze diag_check_1 i diag_check2 były powtarzane 3 razy, choć tylko raz wystarczy. Wyrzuciłem je zatem poza pętlę for, eby zoptymalizować przebieg.
     #Zastanawiam się, czy nie dodać parametru "player", zeby poniej zamiast "X"/"O" dawać zmienne "player"/"opponent". Co sądzisz?
     diag_check_1 = [board[0][0], board[1][1], board[2][2]]
@@ -52,33 +52,32 @@ def inteligent_AI(board, player): #Komputer blokuje ewentualne wygrane gracza
     diag_row_index = {0 : 2, 1 : 1, 2 : 0}
     value = False
     two_in_line = 2
-    for i in range(2): # Dzięki temu komputer będzie dązył do wygranej a nie tylko blokował przeciwnika.
-        if player == "X":
-            player = "O"
-        else:
-            player = "X"
-        if diag_check_1.count(player) == two_in_line and "." in diag_check_1:
-                row = diag_check_1.index(".")
-                col = row
+     # Dzięki temu komputer będzie dązył do wygranej a nie tylko blokował przeciwnika.
+        
+    if (diag_check_1.count(player) == two_in_line or diag_check_1.count(opponent) == two_in_line) and "." in diag_check_1:
+        row = diag_check_1.index(".")
+        col = row
+        value = True
+        
+    elif (diag_check_2.count(player) == two_in_line or diag_check_2.count(opponent) == two_in_line) and "." in diag_check_2:
+        col = diag_check_2.index(".")
+        row = diag_row_index[col]
+        value = True
+        
+    else:
+        for i in range(3):
+            row_check = board[i]
+            col_check = [board[0][i], board[1][i], board[2][i]]
+            if (row_check.count(player) == two_in_line or row_check.count(opponent) == two_in_line) and "." in row_check:
+                row = i
+                col = row_check.index(".")
                 value = True
-        elif diag_check_2.count(player) == two_in_line and "." in diag_check_2:
-                col = diag_check_2.index(".")
-                row = diag_row_index[col]
+                break
+            elif (col_check.count(player) == two_in_line or col_check.count(opponent) == two_in_line) and "." in col_check:
+                row = col_check.index(".")
+                col = i
                 value = True
-        else:
-            for i in range(3):
-                row_check = board[i]
-                col_check = [board[0][i], board[1][i], board[2][i]]
-                if row_check.count(player) == two_in_line and "." in row_check:
-                    row = i
-                    col = row_check.index(".")
-                    value = True
-                    break
-                elif col_check.count(player) == two_in_line and "." in col_check:
-                    row = col_check.index(".")
-                    col = i
-                    value = True
-                    break
+                break
 
     # for i in range(3):
     #     row_check = board[i]
@@ -114,10 +113,10 @@ def inteligent_AI(board, player): #Komputer blokuje ewentualne wygrane gracza
     else:
         return False #value
 
-def get_ai_move(available_coordinate, player, board, coordinates): #komputer sprawdza, czy istnieje zagroenie wygranej gracza, a jeśli takowego nie ma to losuje współrzędne.
+def get_ai_move(available_coordinate, player, board, coordinates, opponent): #komputer sprawdza, czy istnieje zagroenie wygranej gracza, a jeśli takowego nie ma to losuje współrzędne.
     """Returns the coordinates of a valid move for player on board."""
     
-    AI_choice = inteligent_AI(board, player)
+    AI_choice = inteligent_AI(board, player, opponent)
     if AI_choice is not False:
         row, col = AI_choice
 
@@ -180,6 +179,7 @@ def is_full(board):
     for i in board:
         if "." in i:
             value = False
+            break
     return value
 
 
@@ -217,8 +217,10 @@ def tictactoe_game(mode):
     while full_board is False and winner is False:
         if player == player_2:
             player = player_1
+            opponent = player_2
         else:
             player = player_2
+            opponent = player_1
 
         print(colored(f"Now player {player} move", "cyan"))
         time.sleep(0.3)
@@ -229,9 +231,9 @@ def tictactoe_game(mode):
             if player == player_1:
                 row, col = get_move(board, player, available_coordinate, coordinates)
             else:
-                row, col = get_ai_move(available_coordinate, player, board, coordinates)
+                row, col = get_ai_move(available_coordinate, player, board, coordinates, opponent)
         elif mode == "COMPUTER-COMPUTER":
-            row, col = get_ai_move(available_coordinate, player, board, coordinates)
+            row, col = get_ai_move(available_coordinate, player, board, coordinates, opponent)
             
         os.system("cls || clear")
         board = mark(board,colored_board, player, row, col)
