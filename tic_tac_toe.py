@@ -232,7 +232,7 @@ def tictactoe_game(mode):
     #player = player_2
     full_board = is_full(board)
 
-    if player_1 == "X":
+    if player_1 == "X":  #Tutaj pętla if ma za zadanie ustawić, zeby zawsze player == "O". W przeciwnym wypadku raz zaczynałby "X" innym razem zaczynałoby "O"
         player = player_2
     else:
         player = player_1
@@ -240,7 +240,7 @@ def tictactoe_game(mode):
     winner = has_won(board, player)
 
     while full_board is False and winner is False:
-        if player == player_2:
+        if player == player_2: #Tutaj pętla if powoduje ze współrzędne zbierane są naprzemiennie od graczy/komputerów
             player = player_1
             opponent = player_2
         else:
