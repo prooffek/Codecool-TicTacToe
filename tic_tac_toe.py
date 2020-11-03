@@ -112,7 +112,7 @@ def mark(board, colored_board, player, row, col):
         colored_board[row][col] = colored("X", "magenta")
     elif "." in board[row][col] and player == "O":
         board[row][col] = "O"
-        colored_board[row][col] = colored(player, "yellow")
+        colored_board[row][col] = colored("O", "yellow")
     else:
         pass
 
@@ -165,27 +165,43 @@ def quit():
     print(colored("Wyszedłeś z gry :(\nWyczekujemy twojego powrotu...", "green"))
     exit()
 
+def player_info(player):
+    os.system("cls || clear")
+    print(f"Grasz jako: {player}.\n\nPowodzenia!")
+    time.sleep(1)
+    os.system("cls || clear")
+
 def tictactoe_game(mode): 
     os.system("cls || clear") 
     
     available_coordinate = ["A1", "A2", "A3", "B1", "B2", "B3", "C1", "C2", "C3"]
     coordinates = {"A1":[0, 0], "A2":[0, 1], "A3":[0, 2], "B1":[1, 0], "B2":[1,1], "B3":[1, 2], "C1":[2, 0], "C2":[2, 1], "C3":[2, 2]}
     
-    board = init_board()
-    colored_board = init_board()
-    print_board(colored_board)
     
     players = random_player()
     player_1 = players[0]
     player_2 = players[1]
 
+    if mode == "HUMAN-COMPUTER":
+        player_info(player_1)
+    else:
+        pass
+
     if player_1 == "X":
         player = player_2
+        sleep = 0.3
     else:
         player = player_1
-    
+        sleep = 1.5
+
+    board = init_board()
+    colored_board = init_board()
+    print_board(colored_board)
+    time.sleep(sleep)
     full_board = is_full(board)
     winner = has_won(board, player)
+
+    
 
     while full_board is False and winner is False:
         
@@ -197,7 +213,6 @@ def tictactoe_game(mode):
             opponent = player_1
 
         print(colored(f"Now player {player} move", "cyan"))
-        time.sleep(0.3)
 
         if mode == "HUMAN-HUMAN":
             row, col = get_move(board, player, available_coordinate, coordinates)
@@ -213,7 +228,6 @@ def tictactoe_game(mode):
 
         board = mark(board,colored_board, player, row, col)
         print_board(colored_board)
-        time.sleep(1)
         
         winner = has_won(board, player)
         full_board = is_full(board)
