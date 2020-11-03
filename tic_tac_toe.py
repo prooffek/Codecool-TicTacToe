@@ -167,8 +167,8 @@ def quit():
 
 def player_info(player):
     os.system("cls || clear")
-    print(f"Grasz jako: {player}.\n\nPowodzenia!")
-    time.sleep(1)
+    print(colored(f"Grasz jako: {player}.\nPowodzenia!", "green"))
+    time.sleep(2.5)
     os.system("cls || clear")
 
 def tictactoe_game(mode): 
@@ -276,7 +276,6 @@ def main_menu():
         print("Starting the default game mode HUMAN-COMPUTER")  
         tictactoe_game("HUMAN-COMPUTER")
     
-
-
+    
 if __name__ == '__main__':
     main_menu()
