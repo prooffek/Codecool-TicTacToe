@@ -167,7 +167,7 @@ def quit():
 
 def player_info(player):
     os.system("cls || clear")
-    print(colored(f"Grasz jako: {player}.\nPowodzenia!", "green"))
+    print(colored(f"You play as: {player}.\nGood luck!", "green"))
     time.sleep(2.5)
     os.system("cls || clear")
 
@@ -189,7 +189,6 @@ def tictactoe_game(mode):
 
     if player_1 == "X":
         player = player_2
-        sleep = 0.3
     else:
         player = player_1
         sleep = 1.5
