@@ -184,16 +184,17 @@ def tictactoe_game(mode):
 
     if mode == "HUMAN-COMPUTER":
         player_info(player_1)
-    else:
-        pass
+        sleep = 0.5
+    elif mode == "HUMAN-HUMAN":
+        sleep = 0
+    elif mode == "COMPUTER-COMPUTER":
+        sleep = 1
 
     if player_1 == "X":
         player = player_2
-        sleep = 0.1
     else:
         player = player_1
-        sleep = 1.5
-
+        
     board = init_board()
     colored_board = init_board()
     print_board(colored_board)
@@ -213,6 +214,7 @@ def tictactoe_game(mode):
             opponent = player_1
 
         print(colored(f"Now player {player} move", "cyan"))
+        time.sleep(sleep)
 
         if mode == "HUMAN-HUMAN":
             row, col = get_move(board, player, available_coordinate, coordinates)
@@ -228,8 +230,7 @@ def tictactoe_game(mode):
 
         board = mark(board,colored_board, player, row, col)
         print_board(colored_board)
-        if mode == "COMPUTER-COMPUTER":
-            time.sleep(1)
+        time.sleep(sleep)
         winner = has_won(board, player)
         full_board = is_full(board)
 
