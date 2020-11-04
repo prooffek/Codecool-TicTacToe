@@ -189,6 +189,7 @@ def tictactoe_game(mode):
 
     if player_1 == "X":
         player = player_2
+        sleep = 0.1
     else:
         player = player_1
         sleep = 1.5
@@ -227,7 +228,8 @@ def tictactoe_game(mode):
 
         board = mark(board,colored_board, player, row, col)
         print_board(colored_board)
-        
+        if mode == "COMPUTER-COMPUTER":
+            time.sleep(1)
         winner = has_won(board, player)
         full_board = is_full(board)
 
