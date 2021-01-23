@@ -278,6 +278,8 @@ def main_menu():
         print("Starting the default game mode HUMAN-COMPUTER")  
         tictactoe_game("HUMAN-COMPUTER")
     
-    
+    #To jest mój pierwszy komentarz
+    #i linia 2
+
 if __name__ == '__main__':
     main_menu()
